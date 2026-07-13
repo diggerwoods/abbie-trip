@@ -7,17 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sage: #9CAF88;
-            --sage-light: #E8EDE4;
-            --sage-dark: #7A9468;
-            --warm-white: #FDFCFA;
-            --terracotta: #C4856A;
-            --terracotta-light: #F0DDD5;
-            --clay: #B87B5E;
-            --charcoal: #2D3436;
-            --charcoal-light: #636E72;
-            --border: #E8E6E3;
-            --shadow: rgba(0,0,0,0.06);
+            --sage: #9B8EC0;
+            --sage-light: #EDE8F5;
+            --sage-dark: #6B5B95;
+            --warm-white: #FDFBFF;
+            --terracotta: #B39DDB;
+            --terracotta-light: #EDE7F6;
+            --clay: #7E57C2;
+            --charcoal: #2D2436;
+            --charcoal-light: #5C5070;
+            --border: #E8E4EF;
+            --shadow: rgba(107,91,149,0.06);
             --radius: 12px;
         }
 
@@ -189,7 +189,7 @@
         .bird-item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 12px;
             padding: 12px 14px;
             background: white;
             border-radius: 8px;
@@ -206,6 +206,19 @@
         .bird-item.spotted {
             background: var(--sage-light);
             border-color: var(--sage);
+        }
+
+        .bird-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: var(--border);
+        }
+
+        .bird-info {
+            flex: 1;
         }
 
         .bird-item .bird-name {
@@ -835,13 +848,13 @@
 
     // === COUNTDOWN ===
     function updateCountdown() {
-        const tripStart = new Date('2025-07-29T06:00:00');
+        const tripStart = new Date('2026-07-29T06:00:00');
         const now = new Date();
         const diff = tripStart - now;
         const el = document.getElementById('countdown-num');
         const label = document.getElementById('countdown-label');
         if (diff <= 0) {
-            const tripEnd = new Date('2025-08-08T20:00:00');
+            const tripEnd = new Date('2026-08-08T20:00:00');
             if (now <= tripEnd) {
                 el.textContent = "Let's go!";
                 el.style.fontSize = '28px';
@@ -862,19 +875,39 @@
     // === BIRD SPOTTER ===
     const birdData = {
         'Rocky Mountains / Wyoming': [
-            'Mountain Bluebird', 'Golden Eagle', 'Red-tailed Hawk', 'Magpie', "Clark's Nutcracker", 'Western Tanager'
+            {name: 'Mountain Bluebird', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Mountain_Bluebird.jpg/220px-Mountain_Bluebird.jpg'},
+            {name: 'Golden Eagle', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Golden_Eagle_in_flight_-_5.jpg/220px-Golden_Eagle_in_flight_-_5.jpg'},
+            {name: 'Red-tailed Hawk', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Red-tailed_Hawk_%28Buteo_jamaicensis%29_in_flight.jpg/220px-Red-tailed_Hawk_%28Buteo_jamaicensis%29_in_flight.jpg'},
+            {name: 'Magpie', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Black-billed_Magpie.jpg/220px-Black-billed_Magpie.jpg'},
+            {name: "Clark's Nutcracker", img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Clark%27s_Nutcracker.jpg/220px-Clark%27s_Nutcracker.jpg'},
+            {name: 'Western Tanager', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Western_Tanager_%28male%29%2C_Washington_state.jpg/220px-Western_Tanager_%28male%29%2C_Washington_state.jpg'}
         ],
         'Idaho / Snake River': [
-            'Great Blue Heron', 'Osprey', 'American White Pelican', 'Sandhill Crane', 'Bald Eagle'
+            {name: 'Great Blue Heron', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Great_blue_heron_-_nanswer.jpg/220px-Great_blue_heron_-_nAnswer.jpg'},
+            {name: 'Osprey', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Pandion_haliaetus_-_Osprey_in_flight.jpg/220px-Pandion_haliaetus_-_Osprey_in_flight.jpg'},
+            {name: 'American White Pelican', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/American_white_pelican_at_Ding_Darling_NWR.jpg/220px-American_white_pelican_at_Ding_Darling_NWR.jpg'},
+            {name: 'Sandhill Crane', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Grus_canadensis_-Michigan%2C_USA_-flying-8.jpg/220px-Grus_canadensis_-Michigan%2C_USA_-flying-8.jpg'},
+            {name: 'Bald Eagle', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/About_to_Launch_%2826075320352%29.jpg/220px-About_to_Launch_%2826075320352%29.jpg'}
         ],
         'Pacific Northwest / Washington': [
-            "Steller's Jay", 'Varied Thrush', "Anna's Hummingbird", 'Bald Eagle', 'Great Horned Owl', 'Pileated Woodpecker'
+            {name: "Steller's Jay", img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Stellers_Jay_-_Cyanocitta_stelleri.jpg/220px-Stellers_Jay_-_Cyanocitta_stelleri.jpg'},
+            {name: 'Varied Thrush', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Varied_Thrush_%28male%29.jpg/220px-Varied_Thrush_%28male%29.jpg'},
+            {name: "Anna's Hummingbird", img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Calypte_anna_-San_Francisco%2C_California%2C_USA_-male-8.jpg/220px-Calypte_anna_-San_Francisco%2C_California%2C_USA_-male-8.jpg'},
+            {name: 'Great Horned Owl', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Great_Horned_Owl_in_Mammoth.jpg/220px-Great_Horned_Owl_in_Mammoth.jpg'},
+            {name: 'Pileated Woodpecker', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Pileated_Woodpecker_%28Dryocopus_pileatus%29.jpg/220px-Pileated_Woodpecker_%28Dryocopus_pileatus%29.jpg'}
         ],
         'British Columbia': [
-            'Common Loon', 'Belted Kingfisher', 'Rufous Hummingbird', 'Osprey', 'Black-capped Chickadee', 'Whiskey Jack (Gray Jay)'
+            {name: 'Common Loon', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg/220px-Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg'},
+            {name: 'Belted Kingfisher', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Megaceryle-alcyon-001.jpg/220px-Megaceryle-alcyon-001.jpg'},
+            {name: 'Rufous Hummingbird', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Rufous_Hummingbird%2C_male.jpg/220px-Rufous_Hummingbird%2C_male.jpg'},
+            {name: 'Black-capped Chickadee', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Poecile-atricapilla-001.jpg/220px-Poecile-atricapilla-001.jpg'},
+            {name: 'Whiskey Jack (Gray Jay)', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Perisoreus-canadensis-001.jpg/220px-Perisoreus-canadensis-001.jpg'}
         ],
         'Montana': [
-            'Western Meadowlark', 'Prairie Falcon', 'American Kestrel', 'Trumpeter Swan', 'Bald Eagle'
+            {name: 'Western Meadowlark', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Western_Meadowlark.jpg/220px-Western_Meadowlark.jpg'},
+            {name: 'Prairie Falcon', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Prairie_Falcon.jpg/220px-Prairie_Falcon.jpg'},
+            {name: 'American Kestrel', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/AmericanKestrel02.jpg/220px-AmericanKestrel02.jpg'},
+            {name: 'Trumpeter Swan', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Trumpeter_Swans_in_Grand_Teton_NP-NPS.jpg/220px-Trumpeter_Swans_in_Grand_Teton_NP-NPS.jpg'}
         ]
     };
 
@@ -906,12 +939,13 @@
         for (const [region, birds] of Object.entries(birdData)) {
             html += `<div class="region-header">${region}</div>`;
             for (const bird of birds) {
-                const isSpotted = spotted[bird];
+                const isSpotted = spotted[bird.name];
                 if (isSpotted) totalSpotted++;
                 html += `
-                    <div class="bird-item ${isSpotted ? 'spotted' : ''}" onclick="toggleBird('${bird.replace(/'/g, "\\'")}')">
-                        <div>
-                            <div class="bird-name">${bird}</div>
+                    <div class="bird-item ${isSpotted ? 'spotted' : ''}" onclick="toggleBird('${bird.name.replace(/'/g, "\\'")}')">
+                        <img src="${bird.img}" alt="${bird.name}" class="bird-img" onerror="this.style.display='none'">
+                        <div class="bird-info">
+                            <div class="bird-name">${bird.name}</div>
                             ${isSpotted ? `<div class="bird-date">Spotted ${isSpotted}</div>` : ''}
                         </div>
                         <div class="bird-check">${isSpotted ? '&#10003;' : ''}</div>
