@@ -209,12 +209,24 @@
         }
 
         .bird-img {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
             object-fit: cover;
             flex-shrink: 0;
             background: var(--border);
+        }
+
+        .bird-emoji {
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            background: var(--sage-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
         }
 
         .bird-info {
@@ -222,14 +234,22 @@
         }
 
         .bird-item .bird-name {
-            font-weight: 500;
+            font-weight: 600;
             font-size: 14px;
+        }
+
+        .bird-desc {
+            font-size: 12px;
+            color: var(--charcoal-light);
+            margin-top: 2px;
+            line-height: 1.4;
         }
 
         .bird-item .bird-date {
             font-size: 11px;
             color: var(--sage-dark);
             font-weight: 600;
+            margin-top: 2px;
         }
 
         .bird-check {
@@ -924,41 +944,62 @@
     // === BIRD SPOTTER ===
     const birdData = {
         'Rocky Mountains / Wyoming': [
-            {name: 'Mountain Bluebird', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Mountain_Bluebird.jpg/220px-Mountain_Bluebird.jpg'},
-            {name: 'Golden Eagle', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Golden_Eagle_in_flight_-_5.jpg/220px-Golden_Eagle_in_flight_-_5.jpg'},
-            {name: 'Red-tailed Hawk', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Red-tailed_Hawk_%28Buteo_jamaicensis%29_in_flight.jpg/220px-Red-tailed_Hawk_%28Buteo_jamaicensis%29_in_flight.jpg'},
-            {name: 'Magpie', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Black-billed_Magpie.jpg/220px-Black-billed_Magpie.jpg'},
-            {name: "Clark's Nutcracker", img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Clark%27s_Nutcracker.jpg/220px-Clark%27s_Nutcracker.jpg'},
-            {name: 'Western Tanager', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Western_Tanager_%28male%29%2C_Washington_state.jpg/220px-Western_Tanager_%28male%29%2C_Washington_state.jpg'}
+            {name: 'Mountain Bluebird', wiki: 'Mountain_bluebird', emoji: '🔵', desc: 'Brilliant sky-blue, small thrush. Open meadows.'},
+            {name: 'Golden Eagle', wiki: 'Golden_eagle', emoji: '🦅', desc: 'Huge dark brown, golden nape. Soaring over ridges.'},
+            {name: 'Red-tailed Hawk', wiki: 'Red-tailed_hawk', emoji: '🦅', desc: 'Brown with rusty-red tail. Perched on poles.'},
+            {name: 'Black-billed Magpie', wiki: 'Black-billed_magpie', emoji: '🐦‍⬛', desc: 'Black and white with long tail, iridescent green.'},
+            {name: "Clark's Nutcracker", wiki: "Clark%27s_nutcracker", emoji: '🐦', desc: 'Gray body, black wings with white patches. Mountains.'},
+            {name: 'Western Tanager', wiki: 'Western_tanager', emoji: '🟡', desc: 'Yellow body, red head, black wings. Stunning.'}
         ],
         'Idaho / Snake River': [
-            {name: 'Great Blue Heron', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Great_blue_heron_-_nanswer.jpg/220px-Great_blue_heron_-_nAnswer.jpg'},
-            {name: 'Osprey', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Pandion_haliaetus_-_Osprey_in_flight.jpg/220px-Pandion_haliaetus_-_Osprey_in_flight.jpg'},
-            {name: 'American White Pelican', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/American_white_pelican_at_Ding_Darling_NWR.jpg/220px-American_white_pelican_at_Ding_Darling_NWR.jpg'},
-            {name: 'Sandhill Crane', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Grus_canadensis_-Michigan%2C_USA_-flying-8.jpg/220px-Grus_canadensis_-Michigan%2C_USA_-flying-8.jpg'},
-            {name: 'Bald Eagle', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/About_to_Launch_%2826075320352%29.jpg/220px-About_to_Launch_%2826075320352%29.jpg'}
+            {name: 'Great Blue Heron', wiki: 'Great_blue_heron', emoji: '🦢', desc: 'Tall, blue-gray, S-curved neck. Near water.'},
+            {name: 'Osprey', wiki: 'Osprey', emoji: '🦅', desc: 'White belly, dark wings, hovers over water to fish.'},
+            {name: 'American White Pelican', wiki: 'American_white_pelican', emoji: '🦢', desc: 'Huge white bird, orange bill. Lakes and rivers.'},
+            {name: 'Sandhill Crane', wiki: 'Sandhill_crane', emoji: '🦩', desc: 'Tall gray, red forehead patch. Fields and marshes.'},
+            {name: 'Bald Eagle', wiki: 'Bald_eagle', emoji: '🦅', desc: 'White head and tail, dark body. Near rivers/lakes.'}
         ],
         'Pacific Northwest / Washington': [
-            {name: "Steller's Jay", img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Stellers_Jay_-_Cyanocitta_stelleri.jpg/220px-Stellers_Jay_-_Cyanocitta_stelleri.jpg'},
-            {name: 'Varied Thrush', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Varied_Thrush_%28male%29.jpg/220px-Varied_Thrush_%28male%29.jpg'},
-            {name: "Anna's Hummingbird", img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Calypte_anna_-San_Francisco%2C_California%2C_USA_-male-8.jpg/220px-Calypte_anna_-San_Francisco%2C_California%2C_USA_-male-8.jpg'},
-            {name: 'Great Horned Owl', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Great_Horned_Owl_in_Mammoth.jpg/220px-Great_Horned_Owl_in_Mammoth.jpg'},
-            {name: 'Pileated Woodpecker', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Pileated_Woodpecker_%28Dryocopus_pileatus%29.jpg/220px-Pileated_Woodpecker_%28Dryocopus_pileatus%29.jpg'}
+            {name: "Steller's Jay", wiki: "Steller%27s_jay", emoji: '💙', desc: 'Deep blue body, black crested head. Forests.'},
+            {name: 'Varied Thrush', wiki: 'Varied_thrush', emoji: '🟠', desc: 'Orange breast with black necklace. Dark forests.'},
+            {name: "Anna's Hummingbird", wiki: "Anna%27s_hummingbird", emoji: '💚', desc: 'Tiny, iridescent green/pink head. Gardens.'},
+            {name: 'Great Horned Owl', wiki: 'Great_horned_owl', emoji: '🦉', desc: 'Large with ear tufts, yellow eyes. Dawn/dusk.'},
+            {name: 'Pileated Woodpecker', wiki: 'Pileated_woodpecker', emoji: '🪶', desc: 'Crow-sized, red crest, loud drumming on trees.'}
         ],
         'British Columbia': [
-            {name: 'Common Loon', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg/220px-Gavia_immer_-Minocqua%2C_Wisconsin%2C_USA_-swimming-8.jpg'},
-            {name: 'Belted Kingfisher', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Megaceryle-alcyon-001.jpg/220px-Megaceryle-alcyon-001.jpg'},
-            {name: 'Rufous Hummingbird', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Rufous_Hummingbird%2C_male.jpg/220px-Rufous_Hummingbird%2C_male.jpg'},
-            {name: 'Black-capped Chickadee', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Poecile-atricapilla-001.jpg/220px-Poecile-atricapilla-001.jpg'},
-            {name: 'Whiskey Jack (Gray Jay)', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Perisoreus-canadensis-001.jpg/220px-Perisoreus-canadensis-001.jpg'}
+            {name: 'Common Loon', wiki: 'Common_loon', emoji: '🖤', desc: 'Black and white checkered, eerie call. Lakes.'},
+            {name: 'Belted Kingfisher', wiki: 'Belted_kingfisher', emoji: '💙', desc: 'Blue-gray with shaggy crest, dives for fish.'},
+            {name: 'Rufous Hummingbird', wiki: 'Rufous_hummingbird', emoji: '🟠', desc: 'Fiery orange-red, tiny and aggressive.'},
+            {name: 'Black-capped Chickadee', wiki: 'Black-capped_chickadee', emoji: '🐦', desc: 'Tiny, black cap and bib, white cheeks. "Chick-a-dee-dee."'},
+            {name: 'Gray Jay (Whiskey Jack)', wiki: 'Canada_jay', emoji: '🩶', desc: 'Fluffy gray, will steal your snacks. Very friendly.'}
         ],
         'Montana': [
-            {name: 'Western Meadowlark', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Western_Meadowlark.jpg/220px-Western_Meadowlark.jpg'},
-            {name: 'Prairie Falcon', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Prairie_Falcon.jpg/220px-Prairie_Falcon.jpg'},
-            {name: 'American Kestrel', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/AmericanKestrel02.jpg/220px-AmericanKestrel02.jpg'},
-            {name: 'Trumpeter Swan', img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Trumpeter_Swans_in_Grand_Teton_NP-NPS.jpg/220px-Trumpeter_Swans_in_Grand_Teton_NP-NPS.jpg'}
+            {name: 'Western Meadowlark', wiki: 'Western_meadowlark', emoji: '🟡', desc: 'Bright yellow breast, black V. Sings from fence posts.'},
+            {name: 'Prairie Falcon', wiki: 'Prairie_falcon', emoji: '🦅', desc: 'Sandy brown, fast flyer. Open grasslands.'},
+            {name: 'American Kestrel', wiki: 'American_kestrel', emoji: '🧡', desc: 'Small colorful falcon, hovers while hunting.'},
+            {name: 'Trumpeter Swan', wiki: 'Trumpeter_swan', emoji: '🦢', desc: 'Huge all-white, black bill. Lakes and ponds.'}
         ]
     };
+
+    // Fetch bird images from Wikipedia
+    let birdImages = JSON.parse(localStorage.getItem('abbie-bird-images') || '{}');
+
+    async function fetchBirdImages() {
+        for (const birds of Object.values(birdData)) {
+            for (const bird of birds) {
+                if (birdImages[bird.name]) continue;
+                try {
+                    const resp = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${bird.wiki}`);
+                    const data = await resp.json();
+                    if (data.thumbnail && data.thumbnail.source) {
+                        birdImages[bird.name] = data.thumbnail.source;
+                    }
+                } catch(e) {}
+            }
+        }
+        localStorage.setItem('abbie-bird-images', JSON.stringify(birdImages));
+        renderBirds();
+    }
+    fetchBirdImages();
 
     function getSpottedBirds() {
         return JSON.parse(localStorage.getItem('abbie-birds') || '{}');
@@ -990,11 +1031,16 @@
             for (const bird of birds) {
                 const isSpotted = spotted[bird.name];
                 if (isSpotted) totalSpotted++;
+                const imgUrl = birdImages[bird.name];
+                const imgHtml = imgUrl 
+                    ? `<img src="${imgUrl}" alt="${bird.name}" class="bird-img">` 
+                    : `<div class="bird-emoji">${bird.emoji}</div>`;
                 html += `
                     <div class="bird-item ${isSpotted ? 'spotted' : ''}" onclick="toggleBird('${bird.name.replace(/'/g, "\\'")}')">
-                        <img src="${bird.img}" alt="${bird.name}" class="bird-img" onerror="this.style.display='none'">
+                        ${imgHtml}
                         <div class="bird-info">
                             <div class="bird-name">${bird.name}</div>
+                            <div class="bird-desc">${bird.desc}</div>
                             ${isSpotted ? `<div class="bird-date">Spotted ${isSpotted}</div>` : ''}
                         </div>
                         <div class="bird-check">${isSpotted ? '&#10003;' : ''}</div>
