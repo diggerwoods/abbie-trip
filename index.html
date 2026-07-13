@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Abbie's Road Trip Companion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Nunito+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sage: #9CAF88;
+            --sage-light: #E8EDE4;
+            --sage-dark: #7A9468;
+            --warm-white: #FDFCFA;
+            --terracotta: #C4856A;
+            --terracotta-light: #F0DDD5;
+            --clay: #B87B5E;
+            --charcoal: #2D3436;
+            --charcoal-light: #636E72;
+            --border: #E8E6E3;
+            --shadow: rgba(0,0,0,0.06);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background: var(--warm-white);
+            color: var(--charcoal);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Lora', serif;
+            font-weight: 600;
+        }
+
+        .app-header {
+            background: linear-gradient(135deg, var(--sage-light) 0%, var(--warm-white) 100%);
+            padding: 24px 20px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .app-header h1 {
+            font-size: 22px;
+            color: var(--charcoal);
+            margin-bottom: 4px;
+        }
+
+        .app-header p {
+            font-size: 13px;
+            color: var(--charcoal-light);
+            font-weight: 400;
+        }
+
+        .section {
+            display: none;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 18px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--charcoal);
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--charcoal-light);
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--sage-light);
+            color: var(--sage-dark);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-terracotta {
+            background: var(--terracotta-light);
+            color: var(--clay);
+        }
+
+        .day-card {
+            position: relative;
+            padding-left: 24px;
+            border-left: 2px solid var(--sage);
+        }
+
+        .day-card::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--sage);
+            border-radius: 50%;
+        }
+
+        .day-label {
+            font-family: 'Lora', serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--sage-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .day-route {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .day-details {
+            font-size: 13px;
+            color: var(--charcoal-light);
+        }
+
+        .countdown-box {
+            text-align: center;
+            padding: 28px 20px;
+            background: linear-gradient(135deg, var(--sage-light), white);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .countdown-number {
+            font-family: 'Lora', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--sage-dark);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 14px;
+            color: var(--charcoal-light);
+            margin-top: 4px;
+        }
+
+        /* Bird Spotter Styles */
+        .region-header {
+            font-family: 'Lora', serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--sage-dark);
+            margin: 18px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .bird-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .bird-item:active {
+            transform: scale(0.98);
+        }
+
+        .bird-item.spotted {
+            background: var(--sage-light);
+            border-color: var(--sage);
+        }
+
+        .bird-item .bird-name {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .bird-item .bird-date {
+            font-size: 11px;
+            color: var(--sage-dark);
+            font-weight: 600;
+        }
+
+        .bird-check {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .bird-item.spotted .bird-check {
+            background: var(--sage);
+            border-color: var(--sage);
+            color: white;
+        }
+
+        .spotter-stats {
+            text-align: center;
+            padding: 16px;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        .spotter-stats .stat-number {
+            font-family: 'Lora', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--sage-dark);
+        }
+
+        /* License Plate Styles */
+        .plate-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .plate-item {
+            padding: 10px 6px;
+            text-align: center;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .plate-item:active {
+            transform: scale(0.95);
+        }
+
+        .plate-item.found {
+            background: var(--terracotta-light);
+            border-color: var(--terracotta);
+            color: var(--clay);
+        }
+
+        .plate-stats {
+            text-align: center;
+            padding: 16px;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        .plate-stats .stat-number {
+            font-family: 'Lora', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--terracotta);
+        }
+
+        .section-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 8px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--terracotta-light);
+            border-color: var(--terracotta);
+            color: var(--clay);
+        }
+
+        /* Food Guide Styles */
+        .food-location {
+            margin-bottom: 20px;
+        }
+
+        .food-location h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: var(--sage-dark);
+        }
+
+        .food-tip {
+            background: white;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .food-tip .tip-label {
+            font-weight: 600;
+            color: var(--terracotta);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 60px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 13px;
+            resize: vertical;
+            margin-top: 8px;
+            background: white;
+        }
+
+        .notes-area:focus {
+            outline: none;
+            border-color: var(--sage);
+        }
+
+        /* Workout Styles */
+        .workout-day-selector {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .workout-day-btn {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: white;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .workout-day-btn.active {
+            background: var(--sage);
+            border-color: var(--sage);
+            color: white;
+        }
+
+        .workout-day-btn.completed {
+            background: var(--sage-light);
+            border-color: var(--sage);
+            color: var(--sage-dark);
+        }
+
+        .exercise-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .exercise-item:active {
+            transform: scale(0.98);
+        }
+
+        .exercise-item.done {
+            background: var(--sage-light);
+            border-color: var(--sage);
+        }
+
+        .exercise-item .ex-check {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .exercise-item.done .ex-check {
+            background: var(--sage);
+            border-color: var(--sage);
+            color: white;
+        }
+
+        .exercise-info {
+            flex: 1;
+        }
+
+        .exercise-info .ex-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .exercise-info .ex-reps {
+            font-size: 12px;
+            color: var(--charcoal-light);
+        }
+
+        .workout-title {
+            font-family: 'Lora', serif;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .workout-subtitle {
+            font-size: 13px;
+            color: var(--charcoal-light);
+            margin-bottom: 16px;
+        }
+
+        .timer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--terracotta-light);
+            color: var(--clay);
+            border: 1px solid var(--terracotta);
+            border-radius: 20px;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+
+        .timer-display {
+            font-family: 'Lora', serif;
+            font-size: 36px;
+            text-align: center;
+            color: var(--charcoal);
+            padding: 20px;
+            display: none;
+        }
+
+        .timer-display.visible {
+            display: block;
+        }
+
+        /* Watch/Shows Styles */
+        .watch-category {
+            margin-bottom: 20px;
+        }
+
+        .watch-category h3 {
+            font-size: 15px;
+            color: var(--sage-dark);
+            margin-bottom: 10px;
+            font-family: 'Lora', serif;
+        }
+
+        .watch-item {
+            background: white;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 6px;
+        }
+
+        .watch-item .watch-title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .watch-item .watch-desc {
+            font-size: 12px;
+            color: var(--charcoal-light);
+            margin-top: 2px;
+        }
+
+        .tracker-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        .tracker-item.watched {
+            background: var(--sage-light);
+            border-color: var(--sage);
+        }
+
+        .tracker-check {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .tracker-item.watched .tracker-check {
+            background: var(--sage);
+            border-color: var(--sage);
+            color: white;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+            z-index: 100;
+            box-shadow: 0 -2px 10px var(--shadow);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 4px 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: 'Nunito Sans', sans-serif;
+            font-size: 10px;
+            color: var(--charcoal-light);
+            transition: all 0.2s;
+        }
+
+        .nav-item .nav-icon {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .nav-item.active {
+            color: var(--sage-dark);
+        }
+
+        .nav-item.active .nav-icon {
+            transform: scale(1.1);
+        }
+
+        .section-title {
+            font-family: 'Lora', serif;
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: var(--charcoal);
+        }
+
+        .sub-section-title {
+            font-family: 'Lora', serif;
+            font-size: 16px;
+            margin: 16px 0 10px;
+            color: var(--charcoal);
+        }
+
+        @media (min-width: 768px) {
+            .plate-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <h1>Abbie's Road Trip</h1>
+        <p>Colorado to the Pacific Northwest and back</p>
+    </header>
+
+    <!-- TRIP SECTION -->
+    <div id="section-trip" class="section active">
+        <div class="countdown-box">
+            <div class="countdown-number" id="countdown-num">--</div>
+            <div class="countdown-label" id="countdown-label">days until departure</div>
+        </div>
+
+        <h2 class="section-title">Itinerary</h2>
+
+        <div class="card day-card">
+            <div class="day-label">Day 1 - July 29</div>
+            <div class="day-route">Commerce City, CO to Burley, ID</div>
+            <div class="day-details">
+                <span class="badge">~8 hrs driving</span>
+                <span class="badge badge-terracotta">Holiday Inn Express</span>
+                <p style="margin-top:8px">Early morning departure. Long haul through Wyoming and into Idaho.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Day 2 - July 30</div>
+            <div class="day-route">Burley, ID to Ellensburg, WA</div>
+            <div class="day-details">
+                <span class="badge">~6.5 hrs driving</span>
+                <span class="badge badge-terracotta">Holiday Inn Express</span>
+                <p style="margin-top:8px">Through the Snake River Valley into Washington state.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Day 3 - July 31</div>
+            <div class="day-route">Ellensburg, WA to Lynden, WA</div>
+            <div class="day-details">
+                <span class="badge">~4 hrs driving</span>
+                <span class="badge badge-terracotta">AirBnb</span>
+                <p style="margin-top:8px">Stop at Deception Falls. Rehearsal dinner for Trevor's wedding at 5:50 PM.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Day 4 - August 1</div>
+            <div class="day-route">Lynden, WA</div>
+            <div class="day-details">
+                <span class="badge">Wedding Day</span>
+                <span class="badge badge-terracotta">AirBnb</span>
+                <p style="margin-top:8px">Morning: Pick blueberries at Barbie's Berries. Trevor's wedding in Ferndale later that day.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Day 5 - August 2</div>
+            <div class="day-route">Lynden, WA to Vancouver, BC</div>
+            <div class="day-details">
+                <span class="badge">~1 hr driving</span>
+                <span class="badge badge-terracotta">AirBnb</span>
+                <p style="margin-top:8px">Cross into Canada. Baseball: Spokane Indians vs Vancouver Canadians.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Days 6-7 - August 3-4</div>
+            <div class="day-route">Vancouver, BC</div>
+            <div class="day-details">
+                <span class="badge">Free Days</span>
+                <span class="badge badge-terracotta">AirBnb</span>
+                <p style="margin-top:8px">Explore Vancouver. Stanley Park, Granville Island, Gastown, beaches.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Day 8 - August 5</div>
+            <div class="day-route">Vancouver, BC to Radium Hot Springs, BC</div>
+            <div class="day-details">
+                <span class="badge">~8 hrs driving</span>
+                <span class="badge badge-terracotta">2-night stay</span>
+                <p style="margin-top:8px">Long scenic drive through the BC interior. Arrive at hot springs.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Day 9 - August 6</div>
+            <div class="day-route">Radium Hot Springs, BC</div>
+            <div class="day-details">
+                <span class="badge">Rest Day</span>
+                <p style="margin-top:8px">Soak in the hot springs. Try Poutine Queen (check GF options). Relax and recharge.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Day 10 - August 7</div>
+            <div class="day-route">Radium Hot Springs to Billings, MT</div>
+            <div class="day-details">
+                <span class="badge">~7 hrs driving</span>
+                <span class="badge badge-terracotta">Holiday Inn Express East</span>
+                <p style="margin-top:8px">Head east through Montana. Beautiful mountain scenery.</p>
+            </div>
+        </div>
+
+        <div class="card day-card">
+            <div class="day-label">Day 11 - August 8</div>
+            <div class="day-route">Billings, MT to Commerce City, CO</div>
+            <div class="day-details">
+                <span class="badge">~9 hrs driving</span>
+                <span class="badge badge-terracotta">HOME!</span>
+                <p style="margin-top:8px">Final push south through Wyoming. Welcome home!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- BIRDS SECTION -->
+    <div id="section-birds" class="section">
+        <h2 class="section-title">Bird Spotter</h2>
+        <div class="spotter-stats">
+            <div class="stat-number" id="bird-count">0</div>
+            <div style="font-size:13px;color:var(--charcoal-light)">species spotted</div>
+        </div>
+        <div id="bird-list"></div>
+    </div>
+
+    <!-- PLATES SECTION -->
+    <div id="section-plates" class="section">
+        <h2 class="section-title">License Plate Game</h2>
+        <div class="plate-stats">
+            <div class="stat-number" id="plate-count">0</div>
+            <div style="font-size:13px;color:var(--charcoal-light)">plates spotted</div>
+        </div>
+        <div class="section-toggle">
+            <button class="toggle-btn active" onclick="showPlateSection('us')">US States</button>
+            <button class="toggle-btn" onclick="showPlateSection('ca')">Canada</button>
+        </div>
+        <div id="plates-us" class="plate-grid"></div>
+        <div id="plates-ca" class="plate-grid" style="display:none"></div>
+    </div>
+
+    <!-- FOOD SECTION -->
+    <div id="section-food" class="section">
+        <h2 class="section-title">GF Food Guide</h2>
+        <div id="food-guide"></div>
+    </div>
+
+    <!-- WORKOUT SECTION -->
+    <div id="section-workout" class="section">
+        <h2 class="section-title">Daily Workouts</h2>
+        <div class="workout-day-selector" id="workout-days"></div>
+        <div id="workout-content"></div>
+        <div class="timer-display" id="timer-display">0:00</div>
+    </div>
+
+    <!-- WATCH SECTION -->
+    <div id="section-watch" class="section">
+        <h2 class="section-title">Shows, Books & Pods</h2>
+        <div id="watch-content"></div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchSection('trip')">
+            <span class="nav-icon">📅</span>
+            <span>Trip</span>
+        </button>
+        <button class="nav-item" onclick="switchSection('birds')">
+            <span class="nav-icon">🐦</span>
+            <span>Birds</span>
+        </button>
+        <button class="nav-item" onclick="switchSection('plates')">
+            <span class="nav-icon">🚗</span>
+            <span>Plates</span>
+        </button>
+        <button class="nav-item" onclick="switchSection('food')">
+            <span class="nav-icon">🥗</span>
+            <span>Food</span>
+        </button>
+        <button class="nav-item" onclick="switchSection('workout')">
+            <span class="nav-icon">💪</span>
+            <span>Workout</span>
+        </button>
+        <button class="nav-item" onclick="switchSection('watch')">
+            <span class="nav-icon">📺</span>
+            <span>Watch</span>
+        </button>
+    </nav>
+
+    <script>
+    // === NAVIGATION ===
+    function switchSection(name) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('section-' + name).classList.add('active');
+        event.currentTarget.classList.add('active');
+        window.scrollTo(0, 0);
+    }
+
+    // === COUNTDOWN ===
+    function updateCountdown() {
+        const tripStart = new Date('2025-07-29T06:00:00');
+        const now = new Date();
+        const diff = tripStart - now;
+        const el = document.getElementById('countdown-num');
+        const label = document.getElementById('countdown-label');
+        if (diff <= 0) {
+            const tripEnd = new Date('2025-08-08T20:00:00');
+            if (now <= tripEnd) {
+                el.textContent = "Let's go!";
+                el.style.fontSize = '28px';
+                label.textContent = 'The adventure is happening now';
+            } else {
+                el.textContent = 'Home';
+                el.style.fontSize = '28px';
+                label.textContent = 'What an amazing trip!';
+            }
+        } else {
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            el.textContent = days;
+            label.textContent = days === 1 ? 'day until departure' : 'days until departure';
+        }
+    }
+    updateCountdown();
+
+    // === BIRD SPOTTER ===
+    const birdData = {
+        'Rocky Mountains / Wyoming': [
+            'Mountain Bluebird', 'Golden Eagle', 'Red-tailed Hawk', 'Magpie', "Clark's Nutcracker", 'Western Tanager'
+        ],
+        'Idaho / Snake River': [
+            'Great Blue Heron', 'Osprey', 'American White Pelican', 'Sandhill Crane', 'Bald Eagle'
+        ],
+        'Pacific Northwest / Washington': [
+            "Steller's Jay", 'Varied Thrush', "Anna's Hummingbird", 'Bald Eagle', 'Great Horned Owl', 'Pileated Woodpecker'
+        ],
+        'British Columbia': [
+            'Common Loon', 'Belted Kingfisher', 'Rufous Hummingbird', 'Osprey', 'Black-capped Chickadee', 'Whiskey Jack (Gray Jay)'
+        ],
+        'Montana': [
+            'Western Meadowlark', 'Prairie Falcon', 'American Kestrel', 'Trumpeter Swan', 'Bald Eagle'
+        ]
+    };
+
+    function getSpottedBirds() {
+        return JSON.parse(localStorage.getItem('abbie-birds') || '{}');
+    }
+
+    function saveSpottedBirds(data) {
+        localStorage.setItem('abbie-birds', JSON.stringify(data));
+    }
+
+    function toggleBird(bird) {
+        const spotted = getSpottedBirds();
+        if (spotted[bird]) {
+            delete spotted[bird];
+        } else {
+            spotted[bird] = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+        saveSpottedBirds(spotted);
+        renderBirds();
+    }
+
+    function renderBirds() {
+        const spotted = getSpottedBirds();
+        const container = document.getElementById('bird-list');
+        let html = '';
+        let totalSpotted = 0;
+
+        for (const [region, birds] of Object.entries(birdData)) {
+            html += `<div class="region-header">${region}</div>`;
+            for (const bird of birds) {
+                const isSpotted = spotted[bird];
+                if (isSpotted) totalSpotted++;
+                html += `
+                    <div class="bird-item ${isSpotted ? 'spotted' : ''}" onclick="toggleBird('${bird.replace(/'/g, "\\'")}')">
+                        <div>
+                            <div class="bird-name">${bird}</div>
+                            ${isSpotted ? `<div class="bird-date">Spotted ${isSpotted}</div>` : ''}
+                        </div>
+                        <div class="bird-check">${isSpotted ? '&#10003;' : ''}</div>
+                    </div>`;
+            }
+        }
+        container.innerHTML = html;
+        document.getElementById('bird-count').textContent = totalSpotted;
+    }
+    renderBirds();
+
+    // === LICENSE PLATES ===
+    const usStates = [
+        'Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware',
+        'Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky',
+        'Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi',
+        'Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico',
+        'New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania',
+        'Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont',
+        'Virginia','Washington','West Virginia','Wisconsin','Wyoming'
+    ];
+
+    const caProvinces = [
+        'Alberta','British Columbia','Manitoba','New Brunswick','Newfoundland and Labrador',
+        'Northwest Territories','Nova Scotia','Nunavut','Ontario','Prince Edward Island',
+        'Quebec','Saskatchewan','Yukon'
+    ];
+
+    function getFoundPlates() {
+        return JSON.parse(localStorage.getItem('abbie-plates') || '[]');
+    }
+
+    function saveFoundPlates(data) {
+        localStorage.setItem('abbie-plates', JSON.stringify(data));
+    }
+
+    function togglePlate(name) {
+        let found = getFoundPlates();
+        if (found.includes(name)) {
+            found = found.filter(p => p !== name);
+        } else {
+            found.push(name);
+        }
+        saveFoundPlates(found);
+        renderPlates();
+    }
+
+    function renderPlates() {
+        const found = getFoundPlates();
+        const usContainer = document.getElementById('plates-us');
+        const caContainer = document.getElementById('plates-ca');
+
+        usContainer.innerHTML = usStates.map(s =>
+            `<div class="plate-item ${found.includes(s) ? 'found' : ''}" onclick="togglePlate('${s}')">${s}</div>`
+        ).join('');
+
+        caContainer.innerHTML = caProvinces.map(p =>
+            `<div class="plate-item ${found.includes(p) ? 'found' : ''}" onclick="togglePlate('${p}')">${p}</div>`
+        ).join('');
+
+        document.getElementById('plate-count').textContent = found.length;
+    }
+
+    function showPlateSection(type) {
+        document.getElementById('plates-us').style.display = type === 'us' ? 'grid' : 'none';
+        document.getElementById('plates-ca').style.display = type === 'ca' ? 'grid' : 'none';
+        document.querySelectorAll('#section-plates .toggle-btn').forEach((btn, i) => {
+            btn.classList.toggle('active', (type === 'us' && i === 0) || (type === 'ca' && i === 1));
+        });
+    }
+    renderPlates();
+
+    // === FOOD GUIDE ===
+    const foodGuide = [
+        {
+            location: 'Road Trip Essentials',
+            tips: [
+                { label: 'Pack These Snacks', text: 'Rice cakes, mixed nuts, fruit (apples, bananas), GF granola bars (Kind, RXBAR), beef jerky, GF crackers (Simple Mills), dark chocolate, dried mango' },
+                { label: 'Gas Station GF Options', text: 'Nuts, string cheese, hard-boiled eggs, bananas, RXBAR or Kind bars, pork rinds, individual nut butter packs, corn chips' },
+                { label: 'Pro Tip', text: 'Check restaurant menus online before stopping. Search "gluten free" + city name. Chain restaurants like Chipotle, In-N-Out (protein style), and Chick-fil-A (grilled nuggets) are usually reliable.' }
+            ]
+        },
+        {
+            location: 'Wyoming / Idaho (Days 1-2)',
+            tips: [
+                { label: 'Rest Stop Tips', text: 'Stock up on snacks before leaving Colorado. Idaho has good local produce stands along the highway for fresh fruit.' },
+                { label: 'Burley, ID', text: 'Perkins Restaurant has a GF menu. Morey\'s Steakhouse does GF steaks and baked potatoes. Check the hotel breakfast for GF options (eggs, fruit, yogurt).' }
+            ]
+        },
+        {
+            location: 'Washington (Days 3-4)',
+            tips: [
+                { label: 'Ellensburg, WA', text: 'Yellow Church Cafe has GF options clearly marked. Iron Horse Brewery has a GF menu section.' },
+                { label: 'Lynden/Bellingham Area', text: 'Homeskillet in Bellingham has great GF options. Boundary Bay Brewery has a dedicated GF menu. Ask about GF options at the rehearsal/wedding venues ahead of time.' }
+            ]
+        },
+        {
+            location: 'Vancouver, BC (Days 5-7)',
+            tips: [
+                { label: 'Dedicated GF Restaurants', text: 'Nuba (Lebanese, lots of GF). Heirloom Vegetarian has excellent GF options. Salmon n\' Bannock (Indigenous cuisine, very GF-friendly).' },
+                { label: 'Great GF-Friendly Spots', text: 'Miku (sushi, rice-based). Burgoo (soups and stews, ask for GF). White Spot (has GF bun options). Earls Kitchen has a full allergen menu.' },
+                { label: 'Granville Island', text: 'The Public Market has tons of naturally GF vendors: sushi, smoothies, fresh fruit, grilled meats. A Bread Affair has dedicated GF bread.' },
+                { label: 'Breakfast', text: 'Jam Cafe (has GF toast and pancakes). OEB Breakfast Co. has GF toast options.' }
+            ]
+        },
+        {
+            location: 'Radium Hot Springs, BC (Days 8-9)',
+            tips: [
+                { label: 'Poutine Queen', text: 'Ask about GF poutine options. Some poutine places offer GF gravy and use naturally GF fries. Worth calling ahead to confirm.' },
+                { label: 'Other Options', text: 'Helna\'s Stube has schnitzel that may have GF options (ask). Radium Brewing has pub food with some GF options. Stock up at the small grocery store for snacks.' }
+            ]
+        },
+        {
+            location: 'Montana / Home Stretch (Days 10-11)',
+            tips: [
+                { label: 'Billings, MT', text: 'Montana Brewing Company has GF menu items. HarvestStates has farm-to-table with GF choices. Fieldhouse has burgers on GF buns.' },
+                { label: 'Road Snacks', text: 'Re-stock in Billings for the final 9-hour push. Costco/Walmart for GF bars, fruit, and drinks for the last leg home.' }
+            ]
+        }
+    ];
+
+    function getFoodNotes() {
+        return JSON.parse(localStorage.getItem('abbie-food-notes') || '{}');
+    }
+
+    function saveFoodNote(location, note) {
+        const notes = getFoodNotes();
+        notes[location] = note;
+        localStorage.setItem('abbie-food-notes', JSON.stringify(notes));
+    }
+
+    function renderFood() {
+        const notes = getFoodNotes();
+        const container = document.getElementById('food-guide');
+        let html = '';
+
+        for (const section of foodGuide) {
+            html += `<div class="food-location"><h3>${section.location}</h3>`;
+            for (const tip of section.tips) {
+                html += `<div class="food-tip"><div class="tip-label">${tip.label}</div><div>${tip.text}</div></div>`;
+            }
+            const noteVal = notes[section.location] || '';
+            html += `<textarea class="notes-area" placeholder="Your notes for ${section.location}..." onchange="saveFoodNote('${section.location.replace(/'/g, "\\'")}', this.value)">${noteVal}</textarea>`;
+            html += `</div>`;
+        }
+        container.innerHTML = html;
+    }
+    renderFood();
+
+    // === WORKOUTS ===
+    const workouts = [
+        {
+            day: 1, title: 'Upper Body (Bands)', subtitle: 'July 29 - After arrival in Burley',
+            exercises: [
+                { name: 'Banded Pull-Aparts', reps: '3 x 15' },
+                { name: 'Banded Bicep Curls', reps: '3 x 12 each arm' },
+                { name: 'Banded Overhead Press', reps: '3 x 12' },
+                { name: 'Banded Lateral Raises', reps: '3 x 15' },
+                { name: 'Push-ups', reps: '3 x 10-12' },
+                { name: 'Banded Tricep Pushdown (door anchor)', reps: '3 x 12' },
+                { name: 'Banded Face Pulls', reps: '3 x 15' },
+                { name: 'Banded Front Raises', reps: '3 x 12' },
+                { name: 'Plank Hold', reps: '3 x 30 sec', timed: true },
+                { name: 'Banded Reverse Flyes', reps: '3 x 12' }
+            ]
+        },
+        {
+            day: 2, title: 'Lower Body (Bands + Bodyweight)', subtitle: 'July 30 - Burley to Ellensburg day',
+            exercises: [
+                { name: 'Banded Squats', reps: '3 x 15' },
+                { name: 'Banded Romanian Deadlifts', reps: '3 x 12' },
+                { name: 'Walking Lunges', reps: '3 x 12 each leg' },
+                { name: 'Banded Glute Bridges', reps: '3 x 15' },
+                { name: 'Banded Lateral Walks', reps: '3 x 12 each direction' },
+                { name: 'Bulgarian Split Squats (bodyweight)', reps: '3 x 10 each leg' },
+                { name: 'Banded Kickbacks', reps: '3 x 12 each leg' },
+                { name: 'Calf Raises', reps: '3 x 20' },
+                { name: 'Wall Sit', reps: '3 x 45 sec', timed: true },
+                { name: 'Banded Sumo Squats', reps: '3 x 15' }
+            ]
+        },
+        {
+            day: 3, title: 'Full Body Circuit', subtitle: 'July 31 - Before heading to Lynden',
+            exercises: [
+                { name: 'Banded Squat to Press', reps: '3 x 12' },
+                { name: 'Push-ups', reps: '3 x 12' },
+                { name: 'Banded Bent-Over Rows', reps: '3 x 12' },
+                { name: 'Reverse Lunges', reps: '3 x 10 each leg' },
+                { name: 'Banded Bicep Curls', reps: '3 x 12' },
+                { name: 'Mountain Climbers', reps: '3 x 30 sec', timed: true },
+                { name: 'Banded Deadlifts', reps: '3 x 12' },
+                { name: 'Tricep Dips (chair)', reps: '3 x 12' },
+                { name: 'Banded Lateral Raises', reps: '3 x 15' },
+                { name: 'Plank to Push-up', reps: '3 x 8' }
+            ]
+        },
+        {
+            day: 4, title: 'Rest / Stretch (Wedding Day)', subtitle: 'August 1 - Light movement only',
+            exercises: [
+                { name: 'Cat-Cow Stretch', reps: '10 breaths' },
+                { name: 'Child\'s Pose', reps: '60 sec hold', timed: true },
+                { name: 'Thread the Needle', reps: '30 sec each side', timed: true },
+                { name: 'Standing Quad Stretch', reps: '30 sec each leg', timed: true },
+                { name: 'Pigeon Pose', reps: '45 sec each side', timed: true },
+                { name: 'Standing Forward Fold', reps: '60 sec hold', timed: true },
+                { name: 'Hip Circles', reps: '10 each direction' },
+                { name: 'Neck Rolls', reps: '10 each direction' },
+                { name: 'Seated Spinal Twist', reps: '30 sec each side', timed: true },
+                { name: 'Deep Breathing', reps: '2 min, box breathing', timed: true }
+            ]
+        },
+        {
+            day: 5, title: 'Core Focus', subtitle: 'August 2 - Vancouver day',
+            exercises: [
+                { name: 'Dead Bugs', reps: '3 x 12 each side' },
+                { name: 'Plank Hold', reps: '3 x 45 sec', timed: true },
+                { name: 'Bicycle Crunches', reps: '3 x 20' },
+                { name: 'Banded Pallof Press', reps: '3 x 10 each side' },
+                { name: 'Leg Raises', reps: '3 x 12' },
+                { name: 'Side Plank', reps: '3 x 30 sec each side', timed: true },
+                { name: 'Bird Dogs', reps: '3 x 10 each side' },
+                { name: 'Hollow Body Hold', reps: '3 x 20 sec', timed: true },
+                { name: 'Russian Twists', reps: '3 x 20' },
+                { name: 'Flutter Kicks', reps: '3 x 30 sec', timed: true }
+            ]
+        },
+        {
+            day: 6, title: 'Upper Body Push/Pull', subtitle: 'August 3 - Vancouver free day',
+            exercises: [
+                { name: 'Banded Chest Press (door anchor)', reps: '3 x 12' },
+                { name: 'Banded Rows', reps: '3 x 12' },
+                { name: 'Pike Push-ups', reps: '3 x 8' },
+                { name: 'Banded Pull-Aparts', reps: '3 x 15' },
+                { name: 'Diamond Push-ups', reps: '3 x 10' },
+                { name: 'Banded Lat Pulldown', reps: '3 x 12' },
+                { name: 'Banded Upright Rows', reps: '3 x 12' },
+                { name: 'Push-up Hold (bottom)', reps: '3 x 15 sec', timed: true },
+                { name: 'Banded Hammer Curls', reps: '3 x 12' },
+                { name: 'Banded Tricep Extensions', reps: '3 x 12' }
+            ]
+        },
+        {
+            day: 7, title: 'Lower Body + Glutes', subtitle: 'August 4 - Vancouver free day',
+            exercises: [
+                { name: 'Banded Hip Thrusts (shoulders on bed)', reps: '3 x 15' },
+                { name: 'Banded Sumo Squats', reps: '3 x 15' },
+                { name: 'Single Leg Deadlifts (banded)', reps: '3 x 10 each' },
+                { name: 'Banded Clamshells', reps: '3 x 15 each side' },
+                { name: 'Jump Squats', reps: '3 x 12' },
+                { name: 'Banded Fire Hydrants', reps: '3 x 12 each leg' },
+                { name: 'Curtsy Lunges', reps: '3 x 10 each leg' },
+                { name: 'Banded Donkey Kicks', reps: '3 x 15 each leg' },
+                { name: 'Glute Bridge March', reps: '3 x 12 each leg' },
+                { name: 'Wall Sit with Band Abduction', reps: '3 x 30 sec', timed: true }
+            ]
+        },
+        {
+            day: 8, title: 'HIIT (No Equipment)', subtitle: 'August 5 - Before driving to Radium',
+            exercises: [
+                { name: 'Burpees', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'High Knees', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'Jump Squats', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'Mountain Climbers', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'Skaters', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'Push-up to Shoulder Tap', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'Tuck Jumps', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'Plank Jacks', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'Squat Pulses', reps: '40 sec on / 20 sec off', timed: true },
+                { name: 'Lateral Shuffle Touches', reps: '40 sec on / 20 sec off', timed: true }
+            ]
+        },
+        {
+            day: 9, title: 'Full Body Bands', subtitle: 'August 6 - Radium Hot Springs rest day',
+            exercises: [
+                { name: 'Banded Squat to Curl', reps: '3 x 12' },
+                { name: 'Banded Push-up (band across back)', reps: '3 x 10' },
+                { name: 'Banded Good Mornings', reps: '3 x 12' },
+                { name: 'Banded Overhead Tricep Extension', reps: '3 x 12' },
+                { name: 'Banded Lateral Walks', reps: '3 x 12 each way' },
+                { name: 'Banded Shoulder Press', reps: '3 x 12' },
+                { name: 'Banded Glute Bridges', reps: '3 x 15' },
+                { name: 'Banded Woodchops', reps: '3 x 10 each side' },
+                { name: 'Banded Reverse Lunges', reps: '3 x 10 each leg' },
+                { name: 'Banded Face Pulls', reps: '3 x 15' }
+            ]
+        },
+        {
+            day: 10, title: 'Yoga Flow / Stretching', subtitle: 'August 7 - Recovery after hot springs',
+            exercises: [
+                { name: 'Sun Salutation A', reps: '5 flows' },
+                { name: 'Warrior I to Warrior II Flow', reps: '5 each side' },
+                { name: 'Triangle Pose Hold', reps: '45 sec each side', timed: true },
+                { name: 'Low Lunge with Twist', reps: '30 sec each side', timed: true },
+                { name: 'Downward Dog to Cobra Flow', reps: '8 reps' },
+                { name: 'Pigeon Pose', reps: '60 sec each side', timed: true },
+                { name: 'Seated Forward Fold', reps: '60 sec', timed: true },
+                { name: 'Reclined Twist', reps: '45 sec each side', timed: true },
+                { name: 'Legs Up the Wall', reps: '2 min', timed: true },
+                { name: 'Savasana', reps: '3 min', timed: true }
+            ]
+        },
+        {
+            day: 11, title: 'Final Blast - Full Body', subtitle: 'August 8 - Last workout before home',
+            exercises: [
+                { name: 'Banded Squat Press', reps: '4 x 12' },
+                { name: 'Push-ups (max reps)', reps: '3 sets to failure' },
+                { name: 'Banded Deadlifts', reps: '4 x 12' },
+                { name: 'Banded Rows', reps: '4 x 12' },
+                { name: 'Jump Lunges', reps: '3 x 10 each leg' },
+                { name: 'Banded Bicep Curls', reps: '4 x 12' },
+                { name: 'Burpees', reps: '3 x 10' },
+                { name: 'Banded Lateral Raises', reps: '3 x 15' },
+                { name: 'Plank Hold', reps: '60 sec', timed: true },
+                { name: 'Banded Glute Bridge Hold', reps: '45 sec', timed: true }
+            ]
+        }
+    ];
+
+    let currentWorkoutDay = 1;
+    let timerInterval = null;
+    let timerSeconds = 0;
+    let timerRunning = false;
+
+    function getWorkoutData() {
+        return JSON.parse(localStorage.getItem('abbie-workouts') || '{}');
+    }
+
+    function saveWorkoutData(data) {
+        localStorage.setItem('abbie-workouts', JSON.stringify(data));
+    }
+
+    function toggleExercise(day, index) {
+        const data = getWorkoutData();
+        const key = `day${day}`;
+        if (!data[key]) data[key] = [];
+        if (data[key].includes(index)) {
+            data[key] = data[key].filter(i => i !== index);
+        } else {
+            data[key].push(index);
+        }
+        saveWorkoutData(data);
+        renderWorkout();
+    }
+
+    function selectWorkoutDay(day) {
+        currentWorkoutDay = day;
+        renderWorkout();
+    }
+
+    function startTimer(seconds) {
+        if (timerRunning) {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            document.getElementById('timer-display').classList.remove('visible');
+            return;
+        }
+        timerSeconds = seconds || 45;
+        timerRunning = true;
+        const display = document.getElementById('timer-display');
+        display.classList.add('visible');
+        updateTimerDisplay();
+
+        timerInterval = setInterval(() => {
+            timerSeconds--;
+            updateTimerDisplay();
+            if (timerSeconds <= 0) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                display.textContent = 'Done!';
+                setTimeout(() => display.classList.remove('visible'), 2000);
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const min = Math.floor(timerSeconds / 60);
+        const sec = timerSeconds % 60;
+        document.getElementById('timer-display').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    function renderWorkout() {
+        const data = getWorkoutData();
+        const daysContainer = document.getElementById('workout-days');
+        const contentContainer = document.getElementById('workout-content');
+
+        // Render day selector
+        let daysHtml = '';
+        for (let i = 1; i <= 11; i++) {
+            const completed = data[`day${i}`] && data[`day${i}`].length === 10;
+            const active = i === currentWorkoutDay;
+            daysHtml += `<button class="workout-day-btn ${active ? 'active' : ''} ${completed ? 'completed' : ''}" onclick="selectWorkoutDay(${i})">${i}</button>`;
+        }
+        daysContainer.innerHTML = daysHtml;
+
+        // Render current workout
+        const workout = workouts[currentWorkoutDay - 1];
+        const dayData = data[`day${currentWorkoutDay}`] || [];
+
+        let html = `<h3 class="workout-title">${workout.title}</h3>`;
+        html += `<p class="workout-subtitle">${workout.subtitle}</p>`;
+
+        workout.exercises.forEach((ex, idx) => {
+            const done = dayData.includes(idx);
+            html += `
+                <div class="exercise-item ${done ? 'done' : ''}" onclick="toggleExercise(${currentWorkoutDay}, ${idx})">
+                    <div class="ex-check">${done ? '&#10003;' : ''}</div>
+                    <div class="exercise-info">
+                        <div class="ex-name">${ex.name}</div>
+                        <div class="ex-reps">${ex.reps}</div>
+                    </div>
+                </div>`;
+        });
+
+        // Timer button
+        html += `<button class="timer-btn" onclick="startTimer(45)">&#9201; ${timerRunning ? 'Stop Timer' : 'Start 45s Timer'}</button>`;
+        html += ` <button class="timer-btn" onclick="startTimer(60)">&#9201; 60s</button>`;
+        html += ` <button class="timer-btn" onclick="startTimer(30)">&#9201; 30s</button>`;
+
+        contentContainer.innerHTML = html;
+    }
+    renderWorkout();
+
+    // === WATCH / SHOWS / BOOKS ===
+    const watchData = {
+        podcasts: [
+            { title: 'The Lazy Genius', desc: 'Practical tips for what matters to you. Great for road trip planning mindset.' },
+            { title: 'Birds of North America (podcast)', desc: 'Quick episodes about different species - perfect for your birding theme.' },
+            { title: 'Crime Junkie', desc: 'Short true crime episodes, perfect for keeping alert on long drives.' },
+            { title: 'The Read', desc: 'Pop culture and comedy. Light and entertaining.' },
+            { title: 'Ologies with Alie Ward', desc: 'Fun science topics. Check out the ornithology episode.' }
+        ],
+        audiobooks: [
+            { title: 'The Love Hypothesis - Ali Hazelwood', desc: 'STEM romance, witty banter. If you loved Off Campus you will love this.' },
+            { title: 'Beach Read - Emily Henry', desc: 'Two writers swap genres for a summer. Smart and romantic.' },
+            { title: 'People We Meet on Vacation - Emily Henry', desc: 'Best friends, annual road trips, slow burn romance.' },
+            { title: 'Outlander (audiobook) - Diana Gabaldon', desc: 'Re-listen to a favorite? Davina Porter narrates beautifully.' },
+            { title: 'The Invisible Life of Addie LaRue - V.E. Schwab', desc: 'A woman no one remembers. Atmospheric and sweeping.' },
+            { title: 'In a Holidaze - Christina Lauren', desc: 'Light, fun romance with a Groundhog Day twist.' }
+        ],
+        shows: [
+            { title: 'The Summer I Turned Pretty S3', desc: 'If new episodes are out, catch up on the drive!' },
+            { title: 'Daisy Jones & The Six', desc: 'Music, drama, 70s vibes. Similar emotional storytelling to Outlander.' },
+            { title: 'Normal People', desc: 'Intimate, beautiful. If you like slow-burn romance.' },
+            { title: 'Virgin River', desc: 'Small town, romance, drama. Cozy watch for hotel evenings.' },
+            { title: 'From Scratch', desc: 'Beautiful love story, gorgeous Italian/US settings.' },
+            { title: 'One Day (Netflix)', desc: 'Years-spanning romance. Emotional and well-crafted.' }
+        ],
+        tracker: [
+            'The Summer I Turned Pretty S3',
+            'Daisy Jones & The Six',
+            'Normal People',
+            'Virgin River',
+            'From Scratch',
+            'One Day'
+        ]
+    };
+
+    function getWatchedItems() {
+        return JSON.parse(localStorage.getItem('abbie-watched') || '[]');
+    }
+
+    function toggleWatched(title) {
+        let watched = getWatchedItems();
+        if (watched.includes(title)) {
+            watched = watched.filter(w => w !== title);
+        } else {
+            watched.push(title);
+        }
+        localStorage.setItem('abbie-watched', JSON.stringify(watched));
+        renderWatch();
+    }
+
+    function renderWatch() {
+        const watched = getWatchedItems();
+        const container = document.getElementById('watch-content');
+        let html = '';
+
+        // Currently Watching Tracker
+        html += `<div class="watch-category"><h3>Watch List Tracker</h3>`;
+        for (const title of watchData.tracker) {
+            const isWatched = watched.includes(title);
+            html += `
+                <div class="tracker-item ${isWatched ? 'watched' : ''}" onclick="toggleWatched('${title.replace(/'/g, "\\'")}')">
+                    <div class="tracker-check">${isWatched ? '&#10003;' : ''}</div>
+                    <div style="font-size:14px;font-weight:500">${title}</div>
+                </div>`;
+        }
+        html += `</div>`;
+
+        // Show Recommendations
+        html += `<div class="watch-category"><h3>Show Recommendations</h3>`;
+        for (const item of watchData.shows) {
+            html += `<div class="watch-item"><div class="watch-title">${item.title}</div><div class="watch-desc">${item.desc}</div></div>`;
+        }
+        html += `</div>`;
+
+        // Audiobooks
+        html += `<div class="watch-category"><h3>Audiobooks for the Drive</h3>`;
+        for (const item of watchData.audiobooks) {
+            html += `<div class="watch-item"><div class="watch-title">${item.title}</div><div class="watch-desc">${item.desc}</div></div>`;
+        }
+        html += `</div>`;
+
+        // Podcasts
+        html += `<div class="watch-category"><h3>Podcast Picks</h3>`;
+        for (const item of watchData.podcasts) {
+            html += `<div class="watch-item"><div class="watch-title">${item.title}</div><div class="watch-desc">${item.desc}</div></div>`;
+        }
+        html += `</div>`;
+
+        container.innerHTML = html;
+    }
+    renderWatch();
+
+    </script>
+</body>
+</html>
